@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>old google page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: white;
+      text-align: center;
+      margin-top: 150px;
+      overflow: hidden;
+    }
+    #logo {
+      font-size: 64px;
+      font-family: 'Times New Roman', serif;
+      color: #4285F4;
+    }
+    #logo span:nth-child(2) { color: #EA4335; }
+    #logo span:nth-child(3) { color: #FBBC05; }
+    #logo span:nth-child(4) { color: #34A853; }
+    #logo span:nth-child(5) { color: #EA4335; }
+    #logo span:nth-child(6) { color: #4285F4; }
+
+    #search-box {
+      margin-top: 20px;
+    }
+    input[type="text"] {
+      width: 400px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    input[type="submit"] {
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+
+    .popup {
+      position: fixed;
+      width: 350px;
+      background: #f1f1f1;
+      border: 2px solid #999;
+      box-shadow: 5px 5px 20px rgba(0,0,0,0.5);
+      z-index: 1000;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      pointer-events: none;
+    }
+
+    .popup .title-bar {
+      background: #0078D7;
+      color: white;
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      user-select: none;
+    }
+
+    .title-bar-buttons span {
+      background: #fff;
+      color: black;
+      padding: 0 8px;
+      margin-left: 4px;
+      border: 1px solid #ccc;
+      font-weight: bold;
+      cursor: not-allowed;
+      user-select: none;
+    }
+
+    .popup .content {
+      padding: 15px;
+      pointer-events: auto;
+    }
+
+    .popup button {
+      margin: 5px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .vista-popup {
+      position: fixed;
+      width: 280px;
+      background: #eee;
+      border: 2px solid #666;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.4);
+      z-index: 999;
+      padding: 15px;
+      user-select: none;
+    }
+
+    .vista-popup h3 {
+      margin: 0 0 10px 0;
+      color: red;
+      user-select: none;
+    }
+
+    .vista-popup button {
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    #rickroll {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      z-index: 99999;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* BSOD flicker */
+    #bsod {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url("bsod.png");
+      background-size: cover;
+      background-position: center;
+      z-index: 99998;
+      animation: flicker 0.4s infinite;
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    @keyframes flicker {
+      0%, 49% {
+        opacity: 1;
+      }
+      50%, 100% {
+        opacity: 0.4;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="logo">
+    <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+  </div>
+
+  <div id="search-box">
+    <input type="text" id="query" placeholder="Search Google..." autocomplete="off" />
+    <input type="submit" value="Google Search" onclick="triggerCorruption()" />
+    <input type="submit" value="I'm Feeling Lucky" onclick="triggerCorruption()" />
+  </div>
+
+  <div id="popup" class="popup">
+    <div class="title-bar">
+      Device Corrupted
+      <div class="title-bar-buttons">
+        <span>—</span><span>✕</span>
+      </div>
+    </div>
+    <div class="content">
+      <p>Your system has encountered a critical error.</p>
+      <button onclick="multiplyErrors()">Terminate</button>
+      <button onclick="startRickroll()">Ignore</button>
+    </div>
+  </div>
+
+  <div id="rickroll">
+    <video src="vid.mp4" autoplay muted></video>
+  </div>
+
+  <div id="bsod"></div>
+
+  <audio id="errorSound" src="error.mp3"></audio>
+
+  <script>
+    const messages = [
+      "Memory leak in System32\\Driver\\mouse.dll",
+      "Recursive kernel panic detected",
+      "Critical Error: NullPointerException in BIOS",
+      "C:\\Windows\\Corruption\\Detected",
+      "Blue screen imminent...",
+      "Unauthorized operation by explorer.exe",
+      "Failed to load serious-business.dll",
+      "Error 0x80070005: Access is denied",
+      "Kernel Error: Stop Code - BAD_CHAOS_VIBES",
+      "Windows encountered a vibe check failure",
+      "System32\\laugh.dll not found 😂"
+    ];
+
+    document.getElementById('query').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        triggerCorruption();
+      }
+    });
+
+    function triggerCorruption() {
+      document.getElementById('popup').style.display = 'block';
+      showBSOD();
+    }
+
+    function startRickroll() {
+      document.getElementById('popup').style.display = 'none';
+      hideBSOD();
+      document.getElementById('rickroll').style.display = 'block';
+    }
+
+    let multiplier = 1;
+
+    function multiplyErrors() {
+      for (let i = 0; i < multiplier; i++) {
+        generateVistaPopup();
+      }
+      multiplier *= 2;
+    }
+
+    function generateVistaPopup() {
+      const popup = document.createElement('div');
+      popup.className = 'vista-popup';
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+
+      popup.innerHTML = `
+        <h3>❌ System Error</h3>
+        <p>${msg}</p>
+        <button onclick="multiplyErrors()">Terminate</button>
+        <button onclick="startRickroll()">Ignore</button>
+      `;
+
+      popup.style.top = Math.random() * (window.innerHeight - 150) + 'px';
+      popup.style.left = Math.random() * (window.innerWidth - 300) + 'px';
+
+      document.body.appendChild(popup);
+
+      // Play sound
+      const sound = document.getElementById('errorSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    // BSOD flicker control
+    let bsodEl = document.getElementById('bsod');
+    let flickerInterval;
+
+    function showBSOD() {
+      bsodEl.style.display = 'block';
+      if (!flickerInterval) {
+        flickerInterval = setInterval(() => {
+          if (bsodEl.style.opacity == '1' || bsodEl.style.opacity === '') {
+            bsodEl.style.opacity = '0.4';
+          } else {
+            bsodEl.style.opacity = '1';
+          }
+        }, 200);
+      }
+    }
+
+    function hideBSOD() {
+      bsodEl.style.display = 'none';
+      if (flickerInterval) {
+        clearInterval(flickerInterval);
+        flickerInterval = null;
+      }
+      bsodEl.style.opacity = '1';
+    }
+  </script>
+</body>
+</html>
