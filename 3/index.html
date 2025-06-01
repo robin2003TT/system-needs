@@ -175,7 +175,7 @@
   </div>
 
   <div id="rickroll">
-    <video src="vid.mp4" autoplay muted></video>
+    <video id="rrVideo" src="vid.mp4" autoplay playsinline></video>
   </div>
 
   <div id="bsod"></div>
@@ -212,7 +212,15 @@
     function startRickroll() {
       document.getElementById('popup').style.display = 'none';
       hideBSOD();
-      document.getElementById('rickroll').style.display = 'block';
+
+      const rr = document.getElementById('rickroll');
+      const rrVideo = document.getElementById('rrVideo');
+
+      rr.style.display = 'block';
+      rrVideo.muted = false;
+      rrVideo.play().catch(() => {
+        console.log("Autoplay blocked, waiting for user interaction");
+      });
     }
 
     let multiplier = 1;
