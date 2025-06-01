@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Terminal - WinCloud VM</title>
+  <style>
+    body {
+      background: black;
+      color: #00FF00;
+      font-family: monospace;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    #terminal {
+      white-space: pre-wrap;
+      min-height: 100vh;
+    }
+    input {
+      background: black;
+      color: #00FF00;
+      font-family: monospace;
+      font-size: 16px;
+      border: none;
+      outline: none;
+      width: 90%;
+    }
+    #rickroll {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      z-index: 99999;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+<div id="terminal"></div>
+<div id="rickroll">
+  <video id="rrVideo" src="vid.mp4" autoplay></video>
+</div>
+<script>
+const terminal = document.getElementById('terminal');
+const commands = {
+  'help': 'List of available commands (see help-1, help-2 for more):',
+  'help-1': 'dir - Lists files and folders\ncd - Change directory\nipconfig - Display IP info\nnetstat - Show network connections\ntasklist - Display running processes\nwhoami - Show current user\nsysteminfo - Display system details\ncls - Clear the screen\necho - Echo text\nping - Ping a server\nformat - Format a drive\nshutdown - Shutdown computer\nregedit - Open registry editor\nchkdsk - Check disk\nhelp-2 - More commands...',
+  'help-2': 'ver - Windows version\nhostname - System hostname\ndate - Show date\ntime - Show time\nset - Set env variables\ngetmac - MAC address\ntree - Directory structure\ndriverquery - List drivers\ndiskpart - Disk partition tool\nsfc - System file checker\ndism - Deployment servicing tool\ngpresult - Group policy results\nenter god - Activate secret mode',
+  'whoami': 'user: WINCLOUD\\Administrator',
+  'hostname': 'WINCLOUD-SERVER-9',
+  'systeminfo': 'OS: Windows Server 2022\nMemory: 64 GB\nCPU: Intel Xeon 3.5GHz\nDomain: WINCLOUD.NET\nSystem Type: x64-based PC',
+  'ipconfig': 'IPv4 Address: 10.0.0.5\nSubnet Mask: 255.255.255.0\nDefault Gateway: 10.0.0.1',
+  'dir': 'C:\\>\n Program Files\n Users\n Windows\n Games\n Logs\n AI Models\n Rickrolls',
+  'cd': 'Access Denied: Insufficient Permissions.',
+  'format': 'WARNING: Formatting will erase all data on drive C:. Continue? (Y/N)',
+  'ping': 'Pinging 127.0.0.1 with 32 bytes of data:\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nPing complete.',
+  'tasklist': 'explorer.exe   chrome.exe   cmd.exe   ai_daemon.exe   vm_monitor.exe',
+  'regedit': 'Registry editing has been disabled by your administrator.',
+  'enter god': 'rickroll',
+  'cls': 'clear',
+  'ver': 'Microsoft Windows [Version 10.0.26100.4061]\n(c) Microsoft Corporation. All rights reserved.',
+  'echo': 'Echo enabled',
+  'shutdown': 'Shutdown initiated... just kidding.',
+  'tree': 'C:\\\\\n|__ Program Files\n|   |__ Common Files\n|__ Users\n|   |__ Public\n|__ Logs\n    |__ error.log\n    |__ system.log',
+  'sfc': 'Beginning system scan... Verification 100% complete. No integrity violations found.',
+  'dism': 'Deployment Image Servicing and Management tool\nVersion: 10.0.22621.1\nImage servicing complete.',
+  'chkdsk': 'Checking file system... No problems found.',
+  'gpresult': 'User Group Policy Results: Everything is locked by IT.',
+  'set': 'PATH=C:\\Windows\\System32',
+  'getmac': '00-1A-2B-3C-4D-5E  Ethernet',
+  'date': 'The current date is: 2025-06-01',
+  'time': 'The current time is: ' + new Date().toLocaleTimeString(),
+};
+
+let output = "Connecting to WINCLOUD Physical Server...\nConnection established.\nLogged in as Administrator.\nMicrosoft Windows [Version 10.0.26100.4061]\n(c) Microsoft Corporation. All rights reserved.\n\nC:\\>";
+terminal.innerText = output;
+
+const input = document.createElement('input');
+terminal.appendChild(input);
+input.focus();
+
+input.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    const cmd = input.value.trim();
+    output += cmd + "\n";
+    if (commands[cmd]) {
+      if (commands[cmd] === 'clear') {
+        output = "Microsoft Windows [Version 10.0.26100.4061]\n(c) Microsoft Corporation. All rights reserved.\n\nC:\\>";
+      } else if (commands[cmd] === 'rickroll') {
+        document.getElementById('rickroll').style.display = 'block';
+        document.getElementById('rrVideo').play();
+        return;
+      } else {
+        output += commands[cmd] + "\n";
+      }
+    } else {
+      output += `'${cmd}' is not recognized as an internal or external command.\n`;
+    }
+    output += "C:\\>";
+    terminal.innerText = output;
+    input.value = "";
+    terminal.appendChild(input);
+    input.focus();
+  }
+});
+</script>
+</body>
+</html>
