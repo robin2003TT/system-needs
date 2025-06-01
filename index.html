@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PRANK WEB</title>
+  <style>
+    body {
+      background: #000;
+      color: #0f0;
+      font-family: monospace;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      font-size: 3em;
+      text-shadow: 0 0 10px #0f0;
+      margin: 20px 0 10px;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 10px auto;
+      display: block;
+      filter: drop-shadow(0 0 6px lime);
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 15px;
+    }
+
+    .prank-box {
+      width: 160px;
+      height: 220px;
+      background: #111;
+      border: 2px solid #0f0;
+      border-radius: 10px;
+      text-align: center;
+      padding: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    .prank-box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #0f0;
+    }
+
+    .prank-box img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border: 1px solid lime;
+      background: #000;
+    }
+
+    .prank-title {
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 4px;
+      color: #0f0;
+    }
+
+    .prank-desc {
+      font-size: 0.9em;
+      color: #8f8;
+    }
+
+    a {
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <img src="logo.png" class="logo" alt="logo">
+  <h1>PRANK WEB</h1>
+
+  <div class="grid" id="prankGrid"></div>
+
+  <script>
+    const descriptions = [
+      "Popup madness!", "Fake crash!", "Endless loop!", "Rickroll!",
+      "Mouse trap!", "Blue screen!", "Ghost typing!", "Funny alert!",
+      "Broken page!", "Fake virus!", "Weird zoom!", "Dizzy scroll!",
+      "Rainbow UI!", "Keyboard chaos!", "Blink screen!", "Shaky mode!",
+      "Window spam!", "Annoying sound!", "Fake shutdown!", "Invisible prank!",
+      "TV glitch!", "Fake hacker!", "Error spam!", "Sticky UI!",
+      "Endless loading!", "Scanner mode!", "Low battery!", "Meme bomb!",
+      "Cam fake!", "Flashing lights!", "Freeze frame!", "Hidden links!",
+      "Backwards text!", "Annoying ads!", "Funny glitch!", "Laggy buttons!",
+      "Static prank!", "Voice repeat!", "Upside-down!", "Ghost clicker!",
+      "Haunted UI!", "Random keys!", "Looping buttons!", "Fake installer!",
+      "Cringe alert!", "Echo prank!", "Auto scroller!", "Tiny window!",
+      "Flipper prank!", "Classic bait!", "Fun overload!", "Disco screen!",
+      "Cursed UI!", "Redirect storm!", "Broken zoom!", "Fake login!",
+      "No escape!", "Sussy popup!", "Spam alert!", "Inverted prank!",
+      "Rapid blink!", "Mock scan!", "Sad virus!", "X-Ray UI!",
+      "Loud jump!", "Hidden mouse!", "Unclickable prank!", "LOL bomb!",
+      "Shaky glitch!", "Caps lock!", "Weird colors!", "Crazy nav!",
+      "Odd shapes!", "Laugh track!", "Sticky mouse!", "Reversed nav!",
+      "Angry popups!", "Flickering UI!", "Teleport prank!", "Color dance!",
+      "Haunted tab!", "Mimic keys!", "Old-style error!", "Hidden trap!",
+      "Retro bug!", "Creepy text!", "Broken CSS!", "Rage prank!",
+      "Zoom spam!", "Silent scare!", "Alert storm!", "Empty click!",
+      "Slow fade!", "Funny cursor!", "Cursed sound!", "Tiny font!",
+      "Window warp!", "404 rage!", "Backspace jump!", "Surprise LOL!",
+      "Meme overlay!", "Virus popup!", "No close!", "Speed freak!",
+      "Frozen tab!", "Weird nav!", "Joke script!", "Surprise button!"
+    ];
+
+    const grid = document.getElementById('prankGrid');
+    for (let i = 1; i <= 100; i++) {
+      const desc = descriptions[i - 1] || "Funny prank!";
+      grid.innerHTML += `
+        <a href="${i}/index.html" class="prank-box">
+          <img src="${i}/prank.png" alt="Prank ${i}">
+          <div class="prank-title">Prank ${i}</div>
+          <div class="prank-desc">${desc}</div>
+        </a>
+      `;
+    }
+  </script>
+</body>
+</html>
