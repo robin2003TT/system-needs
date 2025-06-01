@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 100px;
+}
+
+h1 {
+    font-size: 50px;
+    color: #4285F4;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 60%;
+    padding: 10px;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#error-box {
+    display: none;
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    width: 300px;
+    background: #D9D9D9;
+    border: 2px solid black;
+    padding: 15px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+}
+
+#error-box p {
+    font-size: 16px;
+}
+
+#error-buttons {
+    display: flex;
+    justify-content: space-between;
+}
