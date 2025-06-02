@@ -2,38 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Windows XP</title>
+  <title>Windows XP Emulator</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      height: 100%;
-      background: url('bg.png') no-repeat center center fixed;
+      font-family: Tahoma, sans-serif;
+      background: url('bg.jpg') no-repeat center center fixed;
       background-size: cover;
-      font-family: "Tahoma", sans-serif;
-      user-select: none;
     }
 
     .desktop-icon {
       position: absolute;
+      width: 64px;
       text-align: center;
       color: white;
-      width: 80px;
+      font-size: 12px;
+      user-select: none;
       cursor: pointer;
     }
 
     .desktop-icon img {
       width: 48px;
       height: 48px;
+      display: block;
+      margin: 0 auto;
     }
 
-    .taskbar {
-      position: absolute;
+    #taskbar {
+      position: fixed;
       bottom: 0;
+      left: 0;
       width: 100%;
       height: 40px;
-      background: linear-gradient(to top, #2a2a2a, #4a4a4a);
+      background: linear-gradient(to top, #0a0a88, #1c48c3);
       display: flex;
       align-items: center;
     }
@@ -43,21 +46,51 @@
       width: 90px;
       height: 32px;
       background: url('start.png') no-repeat center center;
-      background-size: contain;
+      background-size: 120px 40px;
       cursor: pointer;
     }
 
-    .video-overlay {
+    #start-menu {
       position: fixed;
-      top: 0; left: 0;
+      bottom: 40px;
+      left: 0;
+      width: 220px;
+      background: #e0e0e0;
+      border: 2px solid #888;
+      display: none;
+      box-shadow: 3px 3px 8px rgba(0,0,0,0.5);
+      z-index: 99;
+    }
+
+    #start-menu ul {
+      list-style: none;
+      margin: 0;
+      padding: 5px;
+    }
+
+    #start-menu li {
+      padding: 8px;
+      background: #f5f5f5;
+      margin-bottom: 2px;
+      cursor: pointer;
+    }
+
+    #start-menu li:hover {
+      background: #c0d8ff;
+    }
+
+    #rickroll {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
       background: black;
       z-index: 9999;
-      display: none;
     }
 
-    .video-overlay video {
+    #rickroll video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -67,45 +100,55 @@
 <body>
 
   <!-- Desktop Icons -->
-  <div class="desktop-icon" style="top: 60px; left: 40px;" onclick="rickroll()">
-    <img src="mc.png" alt="My Computer" />
+  <div class="desktop-icon" style="top: 30px; left: 30px;" onclick="playRickroll()">
+    <img src="mc.png" />
     <div>My Computer</div>
   </div>
-
-  <div class="desktop-icon" style="top: 140px; left: 40px;" onclick="rickroll()">
-    <img src="doc.png" alt="Documents" />
+  <div class="desktop-icon" style="top: 120px; left: 30px;" onclick="playRickroll()">
+    <img src="doc.png" />
     <div>Documents</div>
   </div>
-
-  <div class="desktop-icon" style="top: 220px; left: 40px;" onclick="rickroll()">
-    <img src="net.png" alt="Network" />
+  <div class="desktop-icon" style="top: 210px; left: 30px;" onclick="playRickroll()">
+    <img src="net.png" />
     <div>Network</div>
   </div>
-
-  <div class="desktop-icon" style="top: 300px; left: 40px;" onclick="rickroll()">
-    <img src="bin.png" alt="Recycle Bin" />
+  <div class="desktop-icon" style="top: 300px; left: 30px;" onclick="playRickroll()">
+    <img src="bin.png" />
     <div>Recycle Bin</div>
   </div>
 
   <!-- Taskbar -->
-  <div class="taskbar">
-    <div class="start-button" onclick="rickroll()"></div>
+  <div id="taskbar">
+    <div class="start-button" onclick="toggleStartMenu()"></div>
   </div>
 
-  <!-- Video Overlay -->
-  <div class="video-overlay" id="overlay">
-    <video id="vid" src="vid.mp4" autoplay></video>
+  <!-- Start Menu -->
+  <div id="start-menu">
+    <ul>
+      <li onclick="playRickroll()">Internet Explorer</li>
+      <li onclick="playRickroll()">My Computer</li>
+      <li onclick="playRickroll()">Documents</li>
+      <li onclick="playRickroll()">Run...</li>
+      <li onclick="playRickroll()">Control Panel</li>
+    </ul>
+  </div>
+
+  <!-- Rickroll Player -->
+  <div id="rickroll">
+    <video src="vid.mp4" autoplay></video>
   </div>
 
   <script>
-    function rickroll() {
-      const overlay = document.getElementById('overlay');
-      const video = document.getElementById('vid');
-      overlay.style.display = 'block';
-      video.play();
-      if (overlay.requestFullscreen) {
-        overlay.requestFullscreen().catch(() => {});
-      }
+    function toggleStartMenu() {
+      const menu = document.getElementById('start-menu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function playRickroll() {
+      document.getElementById('start-menu').style.display = 'none';
+      const rickDiv = document.getElementById('rickroll');
+      rickDiv.style.display = 'block';
+      rickDiv.querySelector('video').play();
     }
   </script>
 
