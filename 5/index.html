@@ -4,12 +4,15 @@
   <meta charset="UTF-8" />
   <title>System Optimizer v2.1</title>
   <style>
-    body {
-      margin: 0;
-      background: black;
-      font-family: monospace;
-      color: lime;
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
       overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: black;
+      color: lime;
+      user-select: none;
+      cursor: none;
     }
 
     #loader {
@@ -19,6 +22,11 @@
       margin: 200px auto 0;
       border: 2px solid lime;
       position: relative;
+      overflow: visible;
+      filter: none;
+      transition: filter 0.2s ease;
+      z-index: 10;
+      border-radius: 5px;
     }
 
     #bar {
@@ -26,123 +34,368 @@
       width: 0%;
       background: lime;
       transition: width 0.5s linear;
+      position: relative;
+      z-index: 20;
+      border-radius: 3px;
+      box-shadow: 0 0 5px lime;
     }
 
     #status {
       text-align: center;
       margin-top: 20px;
       font-size: 18px;
+      user-select: none;
+      z-index: 20;
+      position: relative;
+      color: lime;
+      text-shadow: 0 0 3px lime;
     }
 
-    .popup {
+    /* Glitch fragments (small green shards) */
+    .glitch-fragment {
       position: absolute;
-      background: red;
-      color: white;
-      border: 2px solid yellow;
-      padding: 10px;
-      font-size: 14px;
-      z-index: 9999;
-      animation: shake 0.3s infinite;
+      width: 8px;
+      height: 8px;
+      background: lime;
+      opacity: 0.8;
+      animation: glitchMove 0.3s infinite;
+      z-index: 25;
+      border-radius: 1px;
+      filter: drop-shadow(0 0 2px lime);
     }
 
-    @keyframes shake {
-      0% { transform: translate(0, 0); }
-      25% { transform: translate(5px, -5px); }
-      50% { transform: translate(-5px, 5px); }
-      75% { transform: translate(5px, 5px); }
-      100% { transform: translate(-5px, -5px); }
+    @keyframes glitchMove {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      25%  { transform: translate(3px, -3px) rotate(5deg); }
+      50%  { transform: translate(-3px, 3px) rotate(-5deg); }
+      75%  { transform: translate(3px, 3px) rotate(3deg); }
+      100% { transform: translate(-3px, -3px) rotate(-3deg); }
     }
 
+    /* BSOD fullscreen */
     #bsod {
       display: none;
       position: fixed;
       top: 0; left: 0;
       width: 100vw;
       height: 100vh;
-      background: black;
-      z-index: 99999;
-      background-image: url('bsod.png');
+      background: #010080 url('bsod.png') center center no-repeat;
       background-size: cover;
+      z-index: 10000;
+      user-select: none;
+      cursor: none;
+    }
+
+    /* Flicker effect */
+    .flicker {
+      animation: flickerEffect 0.1s infinite;
+    }
+    @keyframes flickerEffect {
+      0%, 50%, 100% { filter: brightness(1); }
+      25%, 75% { filter: brightness(0.6); }
+    }
+
+    /* Windows-style popup container */
+    .popup {
+      position: absolute;
+      width: 320px;
+      background: #e3e3e3;
+      border: 1px solid #666;
+      box-shadow: 0 0 8px rgba(0,0,0,0.6);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+      z-index: 11000;
+      cursor: default;
+      border-radius: 4px;
+      overflow: hidden;
+      animation: popupFadeIn 0.4s ease forwards;
+    }
+
+    @keyframes popupFadeIn {
+      from {opacity: 0; transform: scale(0.8);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    /* Ribbon top bar like Windows dialogs */
+    .popup-header {
+      background: linear-gradient(90deg, #0078d7, #005a9e);
+      color: white;
+      padding: 8px 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      user-select: none;
+    }
+
+    .popup-header .icon {
+      width: 18px;
+      height: 18px;
+      margin-right: 8px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      filter: drop-shadow(0 0 1px black);
+    }
+
+    .icon-error {
+      background-image: url('data:image/svg+xml;utf8,<svg fill="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/><line x1="12" y1="6" x2="12" y2="13" stroke="white" stroke-width="2"/><circle cx="12" cy="17" r="1" fill="white"/></svg>');
+    }
+
+    .popup-content {
+      background: white;
+      padding: 12px 16px;
+      color: black;
+      font-size: 14px;
+      line-height: 1.3;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .popup-buttons {
+      background: #f0f0f0;
+      padding: 8px;
+      text-align: right;
+      border-top: 1px solid #ccc;
+    }
+
+    .popup-button {
+      background: #0078d7;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      margin-left: 8px;
+      font-size: 13px;
+      border-radius: 2px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      transition: background-color 0.2s;
+    }
+
+    .popup-button:hover {
+      background: #005a9e;
+    }
+
+    /* Random font flicker on error messages */
+    @keyframes fontFlicker {
+      0%, 100% { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+      20% { font-family: 'Courier New', Courier, monospace; }
+      40% { font-family: 'Arial Black', Gadget, sans-serif; }
+      60% { font-family: 'Comic Sans MS', cursive, sans-serif; }
+      80% { font-family: 'Impact', Charcoal, sans-serif; }
     }
   </style>
 </head>
 <body>
   <div id="loader"><div id="bar"></div></div>
   <div id="status">System Optimization in progress...</div>
+
   <div id="bsod"></div>
 
   <script>
+    // Request fullscreen on load
+    function requestFullscreen() {
+      let el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      else if (el.msRequestFullscreen) el.msRequestFullscreen();
+    }
+    requestFullscreen();
+
     const bar = document.getElementById('bar');
+    const loader = document.getElementById('loader');
     const status = document.getElementById('status');
     const bsod = document.getElementById('bsod');
 
     let width = 0;
+    let glitchFragments = [];
+    let popupInterval;
+    let flickerInterval;
+    let fontCycleInterval;
 
-    // Simulate loading
-    const interval = setInterval(() => {
-      width += 10;
-      bar.style.width = width + '%';
+    // List of realistic Windows error messages
+    const errorMessages = [
+      "Your PC ran into a problem and needs to restart.",
+      "A device attached to the system is not functioning.",
+      "Unexpected shutdown due to system error.",
+      "Windows detected a hard disk problem.",
+      "Critical process died.",
+      "Your PC has encountered a serious error.",
+      "The application failed to initialize properly.",
+      "Windows cannot find 'explorer.exe'.",
+      "The system cannot find the file specified.",
+      "A problem has been detected and Windows has been shut down to prevent damage.",
+      "The instruction at 0x00000000 referenced memory at 0x00000000.",
+      "Your computer has been locked due to suspicious activity.",
+      "Error loading operating system.",
+      "The system BIOS is outdated. Please update.",
+      "Driver_irql_not_less_or_equal.",
+      "Kernel_security_check_failure.",
+      "A critical system process died unexpectedly.",
+      "Page fault in nonpaged area."
+    ];
 
+    // Random fonts for flickering effect on error messages
+    const fonts = [
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      "'Courier New', Courier, monospace",
+      "'Arial Black', Gadget, sans-serif",
+      "'Comic Sans MS', cursive, sans-serif",
+      "'Impact', Charcoal, sans-serif"
+    ];
+
+    // Progress loading bar animation
+    function fillLoadingBar() {
       if (width >= 100) {
-        clearInterval(interval);
-        status.innerText = "Finalizing process...";
-        setTimeout(startGlitch, 1000);
+        status.textContent = "Finalizing optimization...";
+        setTimeout(startGlitch, 500);
+        return;
       }
-    }, 500);
+      width += Math.floor(Math.random() * 10) + 5; // Random increment for realism
+      if (width > 100) width = 100;
+      bar.style.width = width + '%';
+      status.textContent = `System Optimization in progress... ${width}%`;
+      setTimeout(fillLoadingBar, 500);
+    }
 
-    function startGlitch() {
-      document.body.style.background = '#111';
-      status.innerText = "ERROR: 0x800F0900 - Glitch in optimization";
-      let glitchInterval = setInterval(() => {
-        status.innerText = randomGlitchText();
-        document.body.style.background = `rgb(${rand(0,255)},${rand(0,255)},${rand(0,255)})`;
-      }, 100);
+    // Create glitch fragments that break from loading bar
+    function createGlitchFragments() {
+      const fragCount = 30;
+      for (let i = 0; i < fragCount; i++) {
+        const frag = document.createElement('div');
+        frag.classList.add('glitch-fragment');
+        frag.style.top = (loader.offsetTop + 10 + Math.random() * 10) + 'px';
+        frag.style.left = (loader.offsetLeft + (width/100)*loader.offsetWidth + Math.random()*20) + 'px';
+        frag.style.width = (2 + Math.random() * 6) + 'px';
+        frag.style.height = (2 + Math.random() * 6) + 'px';
+        document.body.appendChild(frag);
+        glitchFragments.push(frag);
+      }
+    }
 
-      document.addEventListener('mousemove', e => {
-        let popup = document.createElement('div');
-        popup.className = 'popup';
-        popup.innerText = randomError();
-        popup.style.left = e.pageX + 'px';
-        popup.style.top = e.pageY + 'px';
-        document.body.appendChild(popup);
-        setTimeout(() => popup.remove(), 2000);
+    // Animate glitch fragments floating around randomly and fading out
+    function animateGlitchFragments() {
+      glitchFragments.forEach((frag, idx) => {
+        let x = parseFloat(frag.style.left);
+        let y = parseFloat(frag.style.top);
+        // Random movement directions
+        x += (Math.random() - 0.5) * 15;
+        y += (Math.random() - 0.5) * 15;
+        frag.style.left = x + 'px';
+        frag.style.top = y + 'px';
+        frag.style.opacity -= 0.02;
+        if (frag.style.opacity <= 0) {
+          frag.remove();
+          glitchFragments.splice(idx, 1);
+        }
+      });
+      if (glitchFragments.length > 0) {
+        requestAnimationFrame(animateGlitchFragments);
+      }
+    }
+
+    // Generate realistic Windows style popup near mouse
+    function createErrorPopup(x, y) {
+      const popup = document.createElement('div');
+      popup.classList.add('popup');
+      popup.style.top = y + 'px';
+      popup.style.left = x + 'px';
+
+      // Random error message and font
+      const msgIndex = Math.floor(Math.random() * errorMessages.length);
+      const fontIndex = Math.floor(Math.random() * fonts.length);
+      popup.style.fontFamily = fonts[fontIndex];
+
+      popup.innerHTML = `
+        <div class="popup-header">
+          <div class="icon icon-error"></div>
+          <div>Windows Error</div>
+        </div>
+        <div class="popup-content">${errorMessages[msgIndex]}</div>
+        <div class="popup-buttons">
+          <button class="popup-button">OK</button>
+          <button class="popup-button">Details</button>
+          <button class="popup-button">Ignore</button>
+        </div>
+      `;
+
+      // Close popup on OK or Ignore
+      popup.querySelectorAll('.popup-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          popup.remove();
+        });
       });
 
-      document.addEventListener('keydown', () => {
-        bsod.style.display = 'block';
-        setTimeout(() => {
-          bsod.style.display = 'none';
-        }, 150);
-      });
+      document.body.appendChild(popup);
 
+      // Auto-remove popup after 10 seconds to keep chaos manageable
       setTimeout(() => {
-        clearInterval(glitchInterval);
-        window.location.href = "https://www.youtube.com/watch?v=E4WlUXrJgy4";
+        if (popup.parentNode) popup.remove();
       }, 10000);
     }
 
-    function randomError() {
-      const msgs = [
-        "🔥 Critical Kernel Panic",
-        "💾 RAM Overload Detected",
-        "😱 Registry Flooding!",
-        "🦠 Malware Injection: 100%",
-        "💣 Stack Overflow Incoming",
-        "📉 Memory Corruption Occurred",
-        "🧠 CPU Brain Freeze",
-        "🛑 Unknown Fatal Error"
-      ];
-      return msgs[Math.floor(Math.random() * msgs.length)];
+    // Spawn popups following mouse
+    function startPopups() {
+      window.addEventListener('mousemove', e => {
+        if (popupInterval) clearInterval(popupInterval);
+        popupInterval = setInterval(() => {
+          // Create popup near mouse with some randomness
+          const offsetX = (Math.random() - 0.5) * 100;
+          const offsetY = (Math.random() - 0.5) * 50;
+          createErrorPopup(e.clientX + offsetX, e.clientY + offsetY);
+        }, 800);
+      });
     }
 
-    function randomGlitchText() {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
-      return Array.from({ length: 40 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+    // Flicker the BSOD image fullscreen
+    function startBSODFlicker() {
+      bsod.style.display = 'block';
+      let flickerOn = false;
+      flickerInterval = setInterval(() => {
+        flickerOn = !flickerOn;
+        if (flickerOn) {
+          bsod.classList.add('flicker');
+        } else {
+          bsod.classList.remove('flicker');
+        }
+      }, 150);
+
+      // Redirect to Rickroll after 10 seconds flicker
+      setTimeout(() => {
+        clearInterval(flickerInterval);
+        window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+      }, 10000);
     }
 
-    function rand(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+    // Start font flicker cycle for popup error messages
+    function startFontCycle() {
+      fontCycleInterval = setInterval(() => {
+        const popups = document.querySelectorAll('.popup');
+        popups.forEach(popup => {
+          const fontIndex = Math.floor(Math.random() * fonts.length);
+          popup.style.fontFamily = fonts[fontIndex];
+        });
+      }, 1000);
     }
+
+    // Main glitch start function
+    function startGlitch() {
+      loader.style.filter = 'blur(3px)';
+      createGlitchFragments();
+      animateGlitchFragments();
+      status.textContent = "Optimization Failed! Critical Error Detected.";
+      setTimeout(() => {
+        loader.style.display = 'none';
+        status.style.display = 'none';
+        startPopups();
+        startFontCycle();
+        startBSODFlicker();
+      }, 2000);
+    }
+
+    // Start everything
+    fillLoadingBar();
+
   </script>
 </body>
 </html>
