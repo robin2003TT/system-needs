@@ -51,7 +51,7 @@ Visit: [PRANK WEB](https://robin2003tt.github.io/system-needs/)
 This project is not open source.  
 You are not allowed to copy, clone, fork, remix, redistribute, or rebrand any part of it.
 
-See [`LICENSE.md`](LICENSE.md) for the full wrath.
+See [`LICENSE`](LICENSE) for the full wrath.
 
 ---
 
