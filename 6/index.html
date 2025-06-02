@@ -9,7 +9,7 @@
       padding: 0;
       overflow: hidden;
       height: 100%;
-      background: url('bg.jpg') no-repeat center center fixed;
+      background: url('bg.png') no-repeat center center fixed;
       background-size: cover;
       font-family: "Tahoma", sans-serif;
       user-select: none;
@@ -94,14 +94,18 @@
 
   <!-- Video Overlay -->
   <div class="video-overlay" id="overlay">
-    <video src="vid.mp4" autoplay></video>
+    <video id="vid" src="vid.mp4" autoplay></video>
   </div>
 
   <script>
     function rickroll() {
       const overlay = document.getElementById('overlay');
+      const video = document.getElementById('vid');
       overlay.style.display = 'block';
-      overlay.requestFullscreen?.(); // Attempt full screen
+      video.play();
+      if (overlay.requestFullscreen) {
+        overlay.requestFullscreen().catch(() => {});
+      }
     }
   </script>
 
