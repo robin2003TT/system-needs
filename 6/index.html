@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Online Windows XP Emulator</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      font-family: Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+      background: url('https://upload.wikimedia.org/wikipedia/en/7/77/Bliss_%28Windows_XP%29.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    /* Desktop Icons Container */
+    #desktop {
+      position: relative;
+      width: 100%;
+      height: calc(100% - 40px); /* leave space for taskbar */
+      padding: 20px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    /* Icon style */
+    .icon {
+      width: 72px;
+      text-align: center;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+      text-shadow:
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+      user-select: none;
+    }
+    .icon img {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 4px;
+    }
+    .icon:hover {
+      background: rgba(0,0,0,0.3);
+      border-radius: 6px;
+    }
+
+    /* Taskbar */
+    #taskbar {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(to top, #0a3d62, #1e90ff);
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 13px;
+      color: white;
+    }
+
+    /* Start button */
+    #start-button {
+      width: 80px;
+      height: 30px;
+      background: linear-gradient(to bottom, #0078d7, #005a9e);
+      border: 1px solid #004080;
+      border-radius: 4px;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      line-height: 30px;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-left: 8px;
+    }
+    #start-button img {
+      width: 18px;
+      height: 18px;
+    }
+    #start-button:hover {
+      background: linear-gradient(to bottom, #005a9e, #003f6d);
+    }
+
+    /* Start menu */
+    #start-menu {
+      position: fixed;
+      bottom: 40px;
+      left: 10px;
+      width: 250px;
+      background: #c0c0c0;
+      border: 2px solid #000080;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.7);
+      display: none;
+      flex-direction: column;
+      padding: 8px 0;
+      font-size: 14px;
+      color: black;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      z-index: 1000;
+    }
+    #start-menu.visible {
+      display: flex;
+    }
+
+    /* Start menu items */
+    .start-item {
+      padding: 6px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .start-item:hover {
+      background: #000080;
+      color: white;
+    }
+    .start-item img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Fullscreen rickroll container */
+    #rickroll {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      z-index: 2000;
+    }
+    #rickroll video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Desktop Icons -->
+  <div id="desktop">
+    <div class="icon" id="recycle-bin" tabindex="0" title="Recycle Bin">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Windows_Recycle_Bin_Empty_icon.png/48px-Windows_Recycle_Bin_Empty_icon.png" alt="Recycle Bin" />
+      Recycle Bin
+    </div>
+    <div class="icon start-app" tabindex="0" title="My Computer">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Windows_Computer_icon.svg/48px-Windows_Computer_icon.svg.png" alt="My Computer" />
+      My Computer
+    </div>
+    <div class="icon start-app" tabindex="0" title="My Documents">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Windows_My_Documents_icon.svg/48px-Windows_My_Documents_icon.svg.png" alt="My Documents" />
+      My Documents
+    </div>
+    <div class="icon start-app" tabindex="0" title="Internet Explorer">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Internet_Explorer_7_icon.png/48px-Internet_Explorer_7_icon.png" alt="Internet Explorer" />
+      Internet Explorer
+    </div>
+  </div>
+
+  <!-- Taskbar -->
+  <div id="taskbar">
+    <div id="start-button" tabindex="0" aria-label="Start Menu Button">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Windows_logo_-_2012.svg/20px-Windows_logo_-_2012.svg.png" alt="Windows Logo" />
+      Start
+    </div>
+    <div style="flex-grow: 1;"></div>
+    <div id="taskbar-time"></div>
+  </div>
+
+  <!-- Start Menu -->
+  <div id="start-menu" role="menu" aria-hidden="true" aria-label="Start Menu">
+    <div class="start-item start-app" tabindex="0" role="menuitem">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Windows_Computer_icon.svg/20px-Windows_Computer_icon.svg.png" alt="My Computer" />
+      My Computer
+    </div>
+    <div class="start-item start-app" tabindex="0" role="menuitem">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Windows_My_Documents_icon.svg/20px-Windows_My_Documents_icon.svg.png" alt="My Documents" />
+      My Documents
+    </div>
+    <div class="start-item start-app" tabindex="0" role="menuitem">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Internet_Explorer_7_icon.png/20px-Internet_Explorer_7_icon.png" alt="Internet Explorer" />
+      Internet Explorer
+    </div>
+    <div class="start-item" tabindex="0" role="menuitem" id="start-shutdown">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Windows_Shutdown_icon.svg/20px-Windows_Shutdown_icon.svg.png" alt="Shutdown" />
+      Shutdown
+    </div>
+  </div>
+
+  <!-- Rickroll fullscreen video -->
+  <div id="rickroll" aria-hidden="true">
+    <video id="rrVideo" src="vid.mp4" autoplay muted></video>
+  </div>
+
+  <script>
+    // Update clock in taskbar
+    function updateTime() {
+      const timeElem = document.getElementById('taskbar-time');
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2,'0');
+      const m = now.getMinutes().toString().padStart(2,'0');
+      const s = now.getSeconds().toString().padStart(2,'0');
+      timeElem.textContent = `${h}:${m}:${s}`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Start menu toggle
+    const startButton = document.getElementById('start-button');
+    const startMenu = document.getElementById('start-menu');
+    startButton.addEventListener('click', () => {
+      if (startMenu.classList.contains('visible')) {
+        startMenu.classList.remove('visible');
+        startMenu.setAttribute('aria-hidden', 'true');
+      } else {
+        startMenu.classList.add('visible');
+        startMenu.setAttribute('aria-hidden', 'false');
+      }
+    });
+
+    // Close start menu if click outside
+    document.addEventListener('click', (e) => {
+      if (!startMenu.contains(e.target) && !startButton.contains(e.target)) {
+        startMenu.classList.remove('visible');
+        startMenu.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    // Function to show rickroll fullscreen
+    function showRickroll() {
+      const rrDiv = document.getElementById('rickroll');
+      const rrVideo = document.getElementById('rrVideo');
+      rrDiv.style.display = 'block';
+      rrVideo.muted = false;
+      rrVideo.play();
+      // Optional: disable scrolling or inputs
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Attach click to all .start-app and recycle bin
+    const prankElements = document.querySelectorAll('.start-app, #recycle-bin');
+    prankElements.forEach(elem => {
+      elem.addEventListener('click', (e) => {
+        e.preventDefault();
+        showRickroll();
+      });
+      // Also support keyboard enter key for accessibility
+      elem.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showRickroll();
+        }
+      });
+    });
+
+    // Shutdown button just hides start menu and shows alert
+    document.getElementById('start-shutdown').addEventListener('click', () => {
+      alert('Shutting down... Just kidding!');
+      startMenu.classList.remove('visible');
+      startMenu.setAttribute('aria-hidden', 'true');
+    });
+  </script>
+</body>
+</html>
