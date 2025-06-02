@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>System Optimizer v2.1</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      font-family: monospace;
+      color: lime;
+      overflow: hidden;
+    }
+
+    #loader {
+      width: 80%;
+      height: 30px;
+      background: #333;
+      margin: 200px auto 0;
+      border: 2px solid lime;
+      position: relative;
+    }
+
+    #bar {
+      height: 100%;
+      width: 0%;
+      background: lime;
+      transition: width 0.5s linear;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    .popup {
+      position: absolute;
+      background: red;
+      color: white;
+      border: 2px solid yellow;
+      padding: 10px;
+      font-size: 14px;
+      z-index: 9999;
+      animation: shake 0.3s infinite;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(5px, -5px); }
+      50% { transform: translate(-5px, 5px); }
+      75% { transform: translate(5px, 5px); }
+      100% { transform: translate(-5px, -5px); }
+    }
+
+    #bsod {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      z-index: 99999;
+      background-image: url('bsod.png');
+      background-size: cover;
+    }
+  </style>
+</head>
+<body>
+  <div id="loader"><div id="bar"></div></div>
+  <div id="status">System Optimization in progress...</div>
+  <div id="bsod"></div>
+
+  <script>
+    const bar = document.getElementById('bar');
+    const status = document.getElementById('status');
+    const bsod = document.getElementById('bsod');
+
+    let width = 0;
+
+    // Simulate loading
+    const interval = setInterval(() => {
+      width += 10;
+      bar.style.width = width + '%';
+
+      if (width >= 100) {
+        clearInterval(interval);
+        status.innerText = "Finalizing process...";
+        setTimeout(startGlitch, 1000);
+      }
+    }, 500);
+
+    function startGlitch() {
+      document.body.style.background = '#111';
+      status.innerText = "ERROR: 0x800F0900 - Glitch in optimization";
+      let glitchInterval = setInterval(() => {
+        status.innerText = randomGlitchText();
+        document.body.style.background = `rgb(${rand(0,255)},${rand(0,255)},${rand(0,255)})`;
+      }, 100);
+
+      document.addEventListener('mousemove', e => {
+        let popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.innerText = randomError();
+        popup.style.left = e.pageX + 'px';
+        popup.style.top = e.pageY + 'px';
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 2000);
+      });
+
+      document.addEventListener('keydown', () => {
+        bsod.style.display = 'block';
+        setTimeout(() => {
+          bsod.style.display = 'none';
+        }, 150);
+      });
+
+      setTimeout(() => {
+        clearInterval(glitchInterval);
+        window.location.href = "https://www.youtube.com/watch?v=E4WlUXrJgy4";
+      }, 10000);
+    }
+
+    function randomError() {
+      const msgs = [
+        "🔥 Critical Kernel Panic",
+        "💾 RAM Overload Detected",
+        "😱 Registry Flooding!",
+        "🦠 Malware Injection: 100%",
+        "💣 Stack Overflow Incoming",
+        "📉 Memory Corruption Occurred",
+        "🧠 CPU Brain Freeze",
+        "🛑 Unknown Fatal Error"
+      ];
+      return msgs[Math.floor(Math.random() * msgs.length)];
+    }
+
+    function randomGlitchText() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()";
+      return Array.from({ length: 40 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+    }
+
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  </script>
+</body>
+</html>
