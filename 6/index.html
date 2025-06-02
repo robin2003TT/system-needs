@@ -1,265 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Online Windows XP Emulator</title>
-<style>
-  /* Reset & base */
-  * {
-    box-sizing: border-box;
-    user-select: none;
-  }
-  body, html {
-    margin: 0; padding: 0;
-    height: 100%;
-    overflow: hidden;
-    font-family: "Tahoma", Geneva, Verdana, sans-serif;
-  }
-  #desktop {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    background: url('bg.png') no-repeat center center fixed;
-    background-size: cover;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    padding: 10px;
-    gap: 20px;
-  }
-  .icon {
-    width: 72px;
-    text-align: center;
-    color: white;
-    font-size: 12px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .icon img {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 4px;
-  }
-  .icon:hover {
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-  }
+  <meta charset="UTF-8" />
+  <title>Windows XP</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background: url('bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: "Tahoma", sans-serif;
+      user-select: none;
+    }
 
-  /* Taskbar */
-  #taskbar {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: 40px;
-    background: linear-gradient(to top, #0c2461, #192a56);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
-    display: flex;
-    align-items: center;
-    padding: 0 8px;
-  }
-  #start-button {
-    width: 90px;
-    height: 32px;
-    background: url('start_button.png') no-repeat center center;
-    background-size: contain;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  #start-button:active {
-    filter: brightness(0.8);
-  }
+    .desktop-icon {
+      position: absolute;
+      text-align: center;
+      color: white;
+      width: 80px;
+      cursor: pointer;
+    }
 
-  /* Start Menu */
-  #start-menu {
-    position: fixed;
-    bottom: 40px;
-    left: 10px;
-    width: 220px;
-    background: #e6e6e6;
-    border: 1px solid #888;
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-    display: none;
-    flex-direction: column;
-    font-size: 14px;
-    z-index: 1000;
-    user-select: none;
-  }
-  #start-menu.show {
-    display: flex;
-  }
-  #start-menu h3 {
-    margin: 8px 12px 4px;
-    font-weight: bold;
-    color: #000080;
-  }
-  .start-menu-item {
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    border-top: 1px solid #ccc;
-  }
-  .start-menu-item:hover {
-    background-color: #0a64c8;
-    color: white;
-  }
-  .start-menu-item img {
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
-  }
+    .desktop-icon img {
+      width: 48px;
+      height: 48px;
+    }
 
-  /* Rickroll video overlay */
-  #rickroll-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: black;
-    z-index: 99999;
-  }
-  #rickroll-overlay video {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-  }
-</style>
+    .taskbar {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(to top, #2a2a2a, #4a4a4a);
+      display: flex;
+      align-items: center;
+    }
+
+    .start-button {
+      margin-left: 5px;
+      width: 90px;
+      height: 32px;
+      background: url('start.png') no-repeat center center;
+      background-size: contain;
+      cursor: pointer;
+    }
+
+    .video-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      z-index: 9999;
+      display: none;
+    }
+
+    .video-overlay video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
 </head>
 <body>
 
-<div id="desktop" aria-label="Windows XP Desktop">
-  <div class="icon" tabindex="0" data-name="Recycle Bin">
-    <img src="bin.png" alt="Recycle Bin Icon" />
-    Recycle Bin
+  <!-- Desktop Icons -->
+  <div class="desktop-icon" style="top: 60px; left: 40px;" onclick="rickroll()">
+    <img src="mc.png" alt="My Computer" />
+    <div>My Computer</div>
   </div>
-  <div class="icon" tabindex="0" data-name="My Computer">
-    <img src="my_computer.png" alt="My Computer Icon" />
-    My Computer
-  </div>
-  <div class="icon" tabindex="0" data-name="Documents">
-    <img src="documents.png" alt="Documents Icon" />
-    Documents
-  </div>
-  <div class="icon" tabindex="0" data-name="Network Neighborhood">
-    <img src="network.png" alt="Network Icon" />
-    Network Neighborhood
-  </div>
-</div>
 
-<div id="taskbar" role="navigation" aria-label="Taskbar">
-  <div id="start-button" tabindex="0" aria-label="Start Button" title="Start"></div>
-</div>
-
-<div id="start-menu" role="menu" aria-label="Start Menu" aria-hidden="true">
-  <h3>Start Menu</h3>
-  <div class="start-menu-item" tabindex="0" data-name="My Computer">
-    <img src="my_computer.png" alt="" />
-    My Computer
+  <div class="desktop-icon" style="top: 140px; left: 40px;" onclick="rickroll()">
+    <img src="doc.png" alt="Documents" />
+    <div>Documents</div>
   </div>
-  <div class="start-menu-item" tabindex="0" data-name="Documents">
-    <img src="documents.png" alt="" />
-    Documents
-  </div>
-  <div class="start-menu-item" tabindex="0" data-name="Network Neighborhood">
-    <img src="network.png" alt="" />
-    Network Neighborhood
-  </div>
-  <div class="start-menu-item" tabindex="0" data-name="Recycle Bin">
-    <img src="bin.png" alt="" />
-    Recycle Bin
-  </div>
-</div>
 
-<!-- Rickroll video overlay -->
-<div id="rickroll-overlay" aria-hidden="true">
-  <video src="vid.mp4" autoplay muted></video>
-</div>
+  <div class="desktop-icon" style="top: 220px; left: 40px;" onclick="rickroll()">
+    <img src="net.png" alt="Network" />
+    <div>Network</div>
+  </div>
 
-<script>
-  const startButton = document.getElementById('start-button');
-  const startMenu = document.getElementById('start-menu');
-  const desktop = document.getElementById('desktop');
-  const rickrollOverlay = document.getElementById('rickroll-overlay');
-  const rickrollVideo = rickrollOverlay.querySelector('video');
+  <div class="desktop-icon" style="top: 300px; left: 40px;" onclick="rickroll()">
+    <img src="bin.png" alt="Recycle Bin" />
+    <div>Recycle Bin</div>
+  </div>
 
-  // Toggle start menu visibility
-  function toggleStartMenu() {
-    const isVisible = startMenu.classList.contains('show');
-    if (isVisible) {
-      startMenu.classList.remove('show');
-      startMenu.setAttribute('aria-hidden', 'true');
-    } else {
-      startMenu.classList.add('show');
-      startMenu.setAttribute('aria-hidden', 'false');
-      // Focus first item for accessibility
-      const firstItem = startMenu.querySelector('.start-menu-item');
-      if(firstItem) firstItem.focus();
+  <!-- Taskbar -->
+  <div class="taskbar">
+    <div class="start-button" onclick="rickroll()"></div>
+  </div>
+
+  <!-- Video Overlay -->
+  <div class="video-overlay" id="overlay">
+    <video src="vid.mp4" autoplay></video>
+  </div>
+
+  <script>
+    function rickroll() {
+      const overlay = document.getElementById('overlay');
+      overlay.style.display = 'block';
+      overlay.requestFullscreen?.(); // Attempt full screen
     }
-  }
-
-  startButton.addEventListener('click', toggleStartMenu);
-  startButton.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      toggleStartMenu();
-    }
-  });
-
-  // Close start menu when clicking outside
-  document.addEventListener('click', e => {
-    if (!startMenu.contains(e.target) && e.target !== startButton) {
-      startMenu.classList.remove('show');
-      startMenu.setAttribute('aria-hidden', 'true');
-    }
-  });
-
-  // Common function to trigger Rickroll
-  function triggerRickroll() {
-    rickrollOverlay.style.display = 'block';
-    rickrollOverlay.setAttribute('aria-hidden', 'false');
-    rickrollVideo.muted = false;
-    rickrollVideo.play();
-  }
-
-  // Desktop icons click
-  desktop.querySelectorAll('.icon').forEach(icon => {
-    icon.addEventListener('click', () => {
-      triggerRickroll();
-    });
-    icon.addEventListener('keydown', e => {
-      if(e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        triggerRickroll();
-      }
-    });
-  });
-
-  // Start menu items click
-  startMenu.querySelectorAll('.start-menu-item').forEach(item => {
-    item.addEventListener('click', () => {
-      triggerRickroll();
-      startMenu.classList.remove('show');
-      startMenu.setAttribute('aria-hidden', 'true');
-    });
-    item.addEventListener('keydown', e => {
-      if(e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        triggerRickroll();
-        startMenu.classList.remove('show');
-        startMenu.setAttribute('aria-hidden', 'true');
-      }
-    });
-  });
-
-  // Optional: Pause video on overlay click to stop Rickroll
-  rickrollOverlay.addEventListener('click', () => {
-    rickrollVideo.pause();
-    rickrollOverlay.style.display = 'none';
-    rickrollOverlay.setAttribute('aria-hidden', 'true');
-  });
-
-  // Prevent context menu to keep prank effect
-  window.addEventListener('contextmenu', e => e.preventDefault());
-</script>
+  </script>
 
 </body>
 </html>
