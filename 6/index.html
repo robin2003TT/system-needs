@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Windows XP Online</title>
+  <title>Windows XP Prank</title>
   <style>
     html, body {
       margin: 0;
@@ -50,16 +50,17 @@
       background: none;
       border: none;
       cursor: pointer;
-      margin-right: 10px;
       width: 70px;
       height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 0;
     }
 
     #start-btn img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      width: 30px;
+      height: 30px;
     }
 
     #start-menu {
@@ -133,7 +134,7 @@
     <div class="start-item" onclick="rickroll()">Shut Down...</div>
   </div>
 
-  <!-- Hidden Rickroll Video -->
+  <!-- Rickroll Video -->
   <video id="rickvid" src="vid.mp4"></video>
 
   <script>
@@ -142,6 +143,7 @@
     function rickroll() {
       video.style.display = "block";
       video.play();
+      video.setAttribute("controls", false);
     }
 
     function toggleStartMenu() {
@@ -149,7 +151,7 @@
       menu.style.display = menu.style.display === "block" ? "none" : "block";
     }
 
-    // Close start menu when clicking outside
+    // Close start menu if clicking outside
     document.addEventListener("click", (e) => {
       const menu = document.getElementById("start-menu");
       const btn = document.getElementById("start-btn");
