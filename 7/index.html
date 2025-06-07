@@ -11,7 +11,6 @@
         #rockstarLogo { width: 300px; margin-bottom: 10px; }
         #gtaGif { display: none; width: 600px; }
         #rickrollVid { display: none; width: 100%; height: 100vh; position: fixed; top: 0; left: 0; object-fit: cover; }
-        #article { text-align: left; max-width: 800px; margin: auto; background: #111; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2); height: 4000px; overflow-y: scroll; }
     </style>
 </head>
 <body>
@@ -19,9 +18,9 @@
     <h1>GTA 6 Beta Test - Exclusive Port</h1>
     <button id="playBtn">Play Now</button>
     
-    <img id="gtaGif" src="rickroll-intro.gif" alt="GTA 6 Animation">
+    <img id="gtaGif" src="gta6_intro.gif" alt="GTA 6 Animation">
     
-    <video id="rickrollVid" autoplay muted playsinline>
+    <video id="rickrollVid" autoplay controls>
         <source src="vid.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -36,61 +35,10 @@
                 gtaGif.style.display = "none"; // Hide GIF after 3 seconds
                 let vid = document.getElementById("rickrollVid");
                 vid.style.display = "block"; // Reveal Rickroll video
-                vid.play(); // Start Rickroll (no controls!)
+                vid.muted = false; // Ensure audio plays
+                vid.play(); // Start Rickroll
             }, 3000); // Delay for 3 seconds
         });
     </script>
-
-    <div id="article">
-        <h2>Rockstar Games Official Announcement: The Evolution of Grand Theft Auto VI</h2>
-        <p>Rockstar Games has always been at the forefront of interactive storytelling, pioneering open-world mechanics and physics-based realism. With the upcoming launch of GTA 6, we continue refining our proprietary RAGE Engine to ensure seamless rendering of high-density environments, procedural NPC behavior, and fully integrated cloud-based systems.</p>
-
-        <h3>Game Engine Evolution: A Historical Perspective</h3>
-        <p>From the early days of GTA III’s RenderWare-based framework to the revolutionary integration of dynamic AI behaviors in GTA IV, Rockstar’s commitment to technological advancements has been unparalleled. The RAGE Engine has facilitated volumetric rendering enhancements that allow for deeper immersion across multi-regional sandbox environments.</p>
-
-        <h3>Real-Time AI Frameworks and NPC Adaptability</h3>
-        <p>One of the core functionalities embedded within modern gaming frameworks is the procedural AI modeling utilized to determine user engagement levels based on behavioral tracking metrics. Studies have shown that interactive narrative structures significantly increase player retention by dynamically adjusting quest patterns to accommodate emergent decision trees.</p>
-
-        <h3>Cloud-Based Asset Distribution and Procedural Optimization</h3>
-        <p>As cloud computing technologies continue to redefine game development methodologies, Rockstar’s internal teams have devoted substantial resources toward optimizing remote asset distribution models that allow seamless integration with third-party developmental pipelines.</p>
-
-        <h3>Industry Analytics: Next-Gen Graphical Processing Power</h3>
-        <p>The fundamental architectural shifts observed in graphical processing unit (GPU) performance over the past decade highlight significant advancements in texture modeling, volumetric shading algorithms, and environmental physics calculations.</p>
-
-        <h3>Technical Breakdown: Comparative Analysis</h3>
-        <table border="1">
-            <tr>
-                <th>Feature</th>
-                <th>RAGE Engine</th>
-                <th>Unreal Engine</th>
-            </tr>
-            <tr>
-                <td>Global Illumination</td>
-                <td>Optimized for cinematic shading</td>
-                <td>Adaptive real-time reflections</td>
-            </tr>
-            <tr>
-                <td>Ray-Tracing Fidelity</td>
-                <td>Integrated texture overlays</td>
-                <td>Full-spectrum GPU processing</td>
-            </tr>
-            <tr>
-                <td>Cloud-Based Asset Streaming</td>
-                <td>Pre-rendered static caching</td>
-                <td>Scalable procedural generation</td>
-            </tr>
-        </table>
-
-        <h3>Rockstar's Response to Industry Trends</h3>
-        <p>Rockstar Games remains committed to pushing innovation across multiple developmental verticals, incorporating user-driven feedback cycles to refine structural mechanics and establish industry-wide benchmarks regarding next-gen adaptability frameworks.</p>
-
-        <h3>Legal Disclaimer</h3>
-        <p>Rockstar Games reserves the right to modify specifications and beta methodologies at any time. Engagement in early-access testing is voluntary and subject to ongoing evaluation regarding procedural generation mechanics and rendering adaptation techniques.</p>
-
-        <h3>Final Thoughts</h3>
-        <p>This document serves as a reference point for ongoing discussions regarding Rockstar’s strategic implementations within the gaming industry.</p>
-
-        <p>(And by now, the user has **given up reading** and **clicked Play Now**.)</p>
-    </div>
 </body>
 </html>
