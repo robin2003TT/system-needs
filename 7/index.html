@@ -9,8 +9,9 @@
         h1 { font-size: 36px; margin-top: 30px; color: white; }
         #playBtn { padding: 15px 30px; font-size: 22px; cursor: pointer; background: red; color: white; border: none; margin: 20px; }
         #rockstarLogo { width: 300px; margin-bottom: 10px; }
-        #gtaGif { display: none; width: 600px; }
-        #rickrollVid { display: none; width: 100%; height: 100vh; position: fixed; top: 0; left: 0; object-fit: cover; }
+        #gtaGif { display: none; width: 100vw; height: 100vh; object-fit: cover; position: fixed; top: 0; left: 0; }
+        #rickrollVid { display: none; width: 100vw; height: 100vh; object-fit: cover; position: fixed; top: 0; left: 0; }
+        #article { text-align: left; max-width: 800px; margin: auto; background: #111; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2); height: 5000px; overflow-y: scroll; }
     </style>
 </head>
 <body>
@@ -20,7 +21,7 @@
     
     <img id="gtaGif" src="gta6_intro.gif" alt="GTA 6 Animation">
     
-    <video id="rickrollVid" autoplay controls>
+    <video id="rickrollVid" autoplay>
         <source src="vid.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
@@ -29,16 +30,28 @@
         document.getElementById("playBtn").addEventListener("click", function() {
             this.style.display = "none"; // Hide button
             let gtaGif = document.getElementById("gtaGif");
-            gtaGif.style.display = "block"; // Show GIF animation
+            gtaGif.style.display = "block"; // Show fullscreen GIF
             
             setTimeout(function() {
                 gtaGif.style.display = "none"; // Hide GIF after 3 seconds
                 let vid = document.getElementById("rickrollVid");
-                vid.style.display = "block"; // Reveal Rickroll video
+                vid.style.display = "block"; // Reveal fullscreen Rickroll video
                 vid.muted = false; // Ensure audio plays
-                vid.play(); // Start Rickroll
+                vid.play(); // Start Rickroll (no controls!)
             }, 3000); // Delay for 3 seconds
         });
+
+        // Load article.txt dynamically into #article
+        fetch("article.txt")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("article").innerHTML = "<pre>" + data + "</pre>";
+        });
     </script>
+
+    <div id="article">
+        <h2>Loading Rockstar Games Article...</h2>
+        <p>Please wait while we load the full technical breakdown of GTA 6.</p>
+    </div>
 </body>
 </html>
