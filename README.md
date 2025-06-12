@@ -47,11 +47,8 @@ Visit: [PRANK WEB](https://robin2003tt.github.io/system-needs/)
 ---
 
 ## 🔐 License
-
-This project is not open source.  
-You are not allowed to copy, clone, fork, remix, redistribute, or rebrand any part of it.
-
-See [`LICENSE`](LICENSE) for the full wrath.
+Just fork it the right moment u see this repo ;>
+see [`LICENSE`](LICENSE) for the full wrath.
 
 ---
 
@@ -64,6 +61,4 @@ This is not a community project. It is a **singular evil relic.**
 
 ## 💬 Feedback?
 
-Sure, you can scream into the void. But you **cannot fork this**.
-
-> **You don’t contribute to the chaos. You unleash it.**
+Sure, you can scream into the void.
